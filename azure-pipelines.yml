@@ -1,0 +1,34 @@
+# Universal Windows Platform
+# Build a Universal Windows Platform project using Visual Studio.
+# Add steps that test and distribute an app, save build artifacts, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildConfiguration: 'Release'
+  
+steps:
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    configuration: '$(buildConfiguration)'
+    msbuildArgs: '/t:Restore /t:Rebuild /p:Configuration=$(buildConfiguration)'
+
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\*test*.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    rerunFailedTests: True
+    rerunMaxAttempts: '3'
+    rerunType: 'basedOnTestFailureCount'
+    rerunFailedTestCasesMaxLimit: '1'
