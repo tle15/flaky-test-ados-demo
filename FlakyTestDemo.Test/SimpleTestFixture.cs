@@ -13,7 +13,8 @@ namespace FlakyTestDemo.Test
             var randomNumber = new Random().Next();
             var result = randomNumber % 5;
 
-            Assert.That(result, Is.Not.EqualTo(0));
+//             Assert.That(result, Is.Not.EqualTo(0));
+            Assert.That(0, Is.Not.EqualTo(0));
         }
 
         [Test]
